@@ -1,5 +1,6 @@
 package com.bbs.services;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
@@ -26,5 +27,12 @@ public class DetailsServiceImplTests {
 	public void testfindByUsername() {
 		Optional<Details> optional = service.findOptionalByUsername("bob");
 		assertTrue(optional.isPresent());
+	}
+	
+	@Test
+	public void testSaveNewDetails() {
+		Details details = new Details("amy","Amy","Jones","a.j@email.com");
+		details = service.save(details);
+		assertNotNull(details.getId());
 	}
 }

@@ -47,6 +47,17 @@ public class Details {
 	                referencedColumnName = "mid"))
 	@OneToMany
 	private Set<Message> messages;
+	
+	public Details() {}
+
+	public Details(String username, String firstName, String lastName, String email) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+	}
+
+
 
 	public Integer getId() {
 		return id;

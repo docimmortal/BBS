@@ -8,3 +8,9 @@ INSERT INTO details (username, first_name, last_name, email, photo) values
 	('bob','Bob','Smith','bob.smith@email.com', FILE_READ('classpath:/static/images/bob.jpg'));
 INSERT INTO details (username, first_name, last_name, email, photo) values 
 	('joe@king.com','Joe','King','joe@king.com', FILE_READ('classpath:/static/images/joe.jpg'));
+	
+INSERT INTO message_forums(name, description) values ('General','Catch-all everyday chat');
+INSERT INTO message_forums(name, description) values ('Humor','Funny stuff');
+
+
+

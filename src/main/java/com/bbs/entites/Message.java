@@ -1,5 +1,7 @@
 package com.bbs.entites;
 
+import org.hibernate.annotations.Nationalized;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class Message {
 	private String title;
 	
 	@Column
+	@Nationalized
 	private String message;
 	
 	@ManyToOne
@@ -32,6 +35,15 @@ public class Message {
     @JoinColumn(name="mfid", nullable=false)
 	private MessageForum forum;
 	
+	public Message() {}
+	
+	public Message(String title, String message, Details author, MessageForum forum) {
+		this.title = title;
+		this.message = message;
+		this.author = author;
+		this.forum = forum;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -57,4 +69,13 @@ public class Message {
 	public void setAuthor(Details author) {
 		this.author = author;
 	}
+
+	public MessageForum getForum() {
+		return forum;
+	}
+
+	public void setForum(MessageForum forum) {
+		this.forum = forum;
+	}
+
 }

@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="mesage_forums")
+@Table(name="message_forums")
 public class MessageForum {
 
 	@Id
@@ -38,6 +38,13 @@ public class MessageForum {
 	@OneToMany
 	private Set<Message> messages;
 	
+	public MessageForum() {}
+	
+	public MessageForum(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -60,6 +67,14 @@ public class MessageForum {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Set<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set<Message> messages) {
+		this.messages = messages;
 	}
 	
 }

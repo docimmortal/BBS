@@ -20,4 +20,9 @@ public class DetailsServiceImpl implements DetailsService {
 		return repo.findOptionalByUsername(username);
 	}
 
+	@Override
+	public Details save(Details details) {
+		return repo.save(details);
+	}
+
 }
