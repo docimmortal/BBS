@@ -76,5 +76,10 @@ public class MessageForum {
 	public void setMessages(Set<Message> messages) {
 		this.messages = messages;
 	}
+
+	@Override
+	public String toString() {
+		return "MessageForum [id=" + id + ", name=" + name + ", description=" + description + "]";
+	}
 	
 }

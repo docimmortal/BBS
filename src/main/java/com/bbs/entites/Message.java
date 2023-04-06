@@ -78,4 +78,9 @@ public class Message {
 		this.forum = forum;
 	}
 
+	@Override
+	public String toString() {
+		return "Message [id=" + id + ", title=" + title + ", message=" + message + "]";
+	}
+
 }
