@@ -36,6 +36,9 @@
 			<p />
 		</div>
 	</div> <!--  END flex -->
-	<a th:href="@{'/readMessage?id='+1}">message</a>
+	<form th:action="@{/readMessage}" method="post" action="">
+		<input type="hidden" name="id" value="1">
+		<button name="action" value="Read Messages">Read Messages</button>
+	</form>
 </body>
 </html>

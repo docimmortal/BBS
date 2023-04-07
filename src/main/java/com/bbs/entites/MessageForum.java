@@ -1,9 +1,10 @@
 package com.bbs.entites;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,8 +19,7 @@ public class MessageForum {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="mfid")
-	private Integer id;
+	private Integer mfid;
 	
 	@Column
 	private String name;
@@ -29,14 +29,14 @@ public class MessageForum {
 
 	@JoinTable(
 			name="message_forum_messages",
-			joinColumns = @JoinColumn(
+			joinColumns = {@JoinColumn(
 					name="mfpk",
-					referencedColumnName = "mfid"),
-			inverseJoinColumns = @JoinColumn(
+					referencedColumnName = "mfid")},
+			inverseJoinColumns = {@JoinColumn(
 	                name = "mpk",
-	                referencedColumnName = "mid"))
-	@OneToMany
-	private Set<Message> messages;
+	                referencedColumnName = "mid")})
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Message> messages;
 	
 	public MessageForum() {}
 	
@@ -45,12 +45,12 @@ public class MessageForum {
 		this.description = description;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getMfid() {
+		return mfid;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setMfid(Integer mfid) {
+		this.mfid = mfid;
 	}
 
 	public String getName() {
@@ -69,17 +69,17 @@ public class MessageForum {
 		this.description = description;
 	}
 
-	public Set<Message> getMessages() {
+	public List<Message> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(Set<Message> messages) {
+	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
 
 	@Override
 	public String toString() {
-		return "MessageForum [id=" + id + ", name=" + name + ", description=" + description + "]";
+		return "MessageForum [id=" + mfid + ", name=" + name + ", description=" + description + "]";
 	}
 	
 }

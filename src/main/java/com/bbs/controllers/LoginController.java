@@ -1,6 +1,5 @@
 package com.bbs.controllers;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.bbs.entites.Details;
 import com.bbs.services.DetailsServiceImpl;
-import com.bbs.utilities.ImageUtilities;
 
 @Controller
 public class LoginController {

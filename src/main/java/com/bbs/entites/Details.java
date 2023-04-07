@@ -1,9 +1,11 @@
 package com.bbs.entites;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,8 +21,7 @@ public class Details {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="did")
-	private Integer id;
+	private Integer did;
 	
 	@Column
 	private String username;
@@ -39,14 +40,14 @@ public class Details {
 	private byte[] photo;
 	
 	@JoinTable(name="details_messages",
-			joinColumns = @JoinColumn(
+			joinColumns = { @JoinColumn(
 					name="dpk",
-					referencedColumnName = "did"),
-			inverseJoinColumns = @JoinColumn(
+					referencedColumnName = "did")},
+			inverseJoinColumns = {@JoinColumn(
 	                name = "mpk",
-	                referencedColumnName = "mid"))
-	@OneToMany
-	private Set<Message> messages;
+	                referencedColumnName = "mid")})
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<Message> messages;
 	
 	public Details() {}
 
@@ -57,14 +58,12 @@ public class Details {
 		this.email = email;
 	}
 
-
-
-	public Integer getId() {
-		return id;
+	public Integer getDid() {
+		return did;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setDid(Integer did) {
+		this.did = did;
 	}
 
 	public String getUsername() {
@@ -108,11 +107,11 @@ public class Details {
 		this.photo = photo;
 	}
 
-	public Set<Message> getMessages() {
+	public List<Message> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(Set<Message> messages) {
+	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
 

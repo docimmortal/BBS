@@ -33,6 +33,6 @@ public class DetailsServiceImplTests {
 	public void testSaveNewDetails() {
 		Details details = new Details("amy","Amy","Jones","a.j@email.com");
 		details = service.save(details);
-		assertNotNull(details.getId());
+		assertNotNull(details.getDid());
 	}
 }

@@ -12,5 +12,11 @@ INSERT INTO details (username, first_name, last_name, email, photo) values
 INSERT INTO message_forums(name, description) values ('General','Catch-all everyday chat');
 INSERT INTO message_forums(name, description) values ('Humor','Funny stuff');
 
+INSERT INTO messages(title, message) values ('Hello!',CAST('This is a test message.' AS CLOB));
+INSERT INTO messages(title, message) values ('Welcome!',CAST('This is a different message.' AS CLOB));
 
+INSERT INTO details_messages values(1,1);
+INSERT INTO details_messages values(2,2);
 
+INSERT INTO message_forum_messages values(1,1);
+INSERT INTO message_forum_messages values(1,2);

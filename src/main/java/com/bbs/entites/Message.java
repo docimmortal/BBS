@@ -4,6 +4,7 @@ import org.hibernate.annotations.Nationalized;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,8 +18,7 @@ public class Message {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="mid")
-	private Integer id;
+	private Integer mid;
 	
 	@Column
 	private String title;
@@ -27,12 +27,12 @@ public class Message {
 	@Nationalized
 	private String message;
 	
-	@ManyToOne
-    @JoinColumn(name="did", nullable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="did")
 	private Details author;
 	
-	@ManyToOne
-    @JoinColumn(name="mfid", nullable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="mfid")
 	private MessageForum forum;
 	
 	public Message() {}
@@ -44,11 +44,11 @@ public class Message {
 		this.forum = forum;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getMid() {
+		return mid;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setId(Integer mid) {
+		this.mid = mid;
 	}
 	public String getTitle() {
 		return title;
@@ -80,7 +80,7 @@ public class Message {
 
 	@Override
 	public String toString() {
-		return "Message [id=" + id + ", title=" + title + ", message=" + message + "]";
+		return "Message [id=" + mid + ", title=" + title + ", message=" + message + "]";
 	}
 
 }
