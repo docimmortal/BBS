@@ -23,7 +23,7 @@ public class ImageController {
 	private DetailsService service;
 
 	@GetMapping("/image/{username}")
-	public void showProductImage(@PathVariable String username,
+	public void showUserImage(@PathVariable String username,
 	                               HttpServletResponse response) throws IOException {
 		response.setContentType("image/jpeg"); // Or whatever format you wanna use
 		System.out.println("USERNAME: "+username);

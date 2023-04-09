@@ -17,6 +17,7 @@ public class ProjectSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeHttpRequests()
+		.requestMatchers("/images/**").permitAll()
 		.anyRequest().authenticated()
 		.and().httpBasic()
 		.and().logout().permitAll()

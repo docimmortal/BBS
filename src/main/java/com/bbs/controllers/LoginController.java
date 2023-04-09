@@ -23,7 +23,7 @@ public class LoginController {
 	@GetMapping("/login")
 	public String login() {
 		//bob password is puser123
-		//joe password is padm123
+		//joe@king.com password is padm123
 		//System.out.println(passwordEncoder.encode("padm123"));
 		return "login";
 	}

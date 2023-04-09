@@ -1,11 +1,11 @@
-CREATE TABLE authorities(
+CREATE TABLE Authorities(
 	id int NOT NULL AUTO_INCREMENT,
 	username VARCHAR(45) NOT NULL,
 	authority VARCHAR(45) NOT NULL,
 	PRIMARY KEY(id)
 );
 
-CREATE TABLE users(
+CREATE TABLE Users(
 	id int NOT NULL AUTO_INCREMENT,
 	username VARCHAR(45) NOT NULL,
 	password VARCHAR(256) NOT NULL,

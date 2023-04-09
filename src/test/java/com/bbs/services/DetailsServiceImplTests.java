@@ -1,9 +1,16 @@
 package com.bbs.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bbs.entites.Details;
+import com.bbs.utilities.ImageUtilities;
 
 import jakarta.transaction.Transactional;
 
@@ -32,7 +40,22 @@ public class DetailsServiceImplTests {
 	@Test
 	public void testSaveNewDetails() {
 		Details details = new Details("amy","Amy","Jones","a.j@email.com");
-		details = service.save(details);
+		try {
+			BufferedImage image = ImageUtilities.getImageFromFile("none.jpg",true);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(image, "jpg", baos);
+			byte[] bytes = baos.toByteArray();
+			details.setPhoto(bytes); // local file in project
+			details = service.save(details);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		assertNotNull(details.getDid());
+	}
+	
+	@Test
+	public void testFindAll() {
+		List<Details> list = service.findAll();
+		assertEquals(2, list.size());
 	}
 }
