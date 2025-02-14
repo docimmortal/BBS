@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 import com.bbs.repos.DetailsRepository;
 import com.bbs.utilities.ImageUtilities;
 
@@ -23,12 +23,12 @@ public class DetailsServiceImpl implements DetailsService {
 	
 
 	@Override
-	public Optional<Details> findOptionalByUsername(String username) {
+	public Optional<UserDetails> findOptionalByUsername(String username) {
 		return repo.findOptionalByUsername(username);
 	}
 
 	@Override
-	public Details save(Details details) {
+	public UserDetails save(UserDetails details) {
 		
 		if (details.getPhoto() == null) {
 			try {
@@ -45,7 +45,7 @@ public class DetailsServiceImpl implements DetailsService {
 	}
 
 	@Override
-	public List<Details> findAll() {
+	public List<UserDetails> findAll() {
 		return repo.findAll();
 	}
 

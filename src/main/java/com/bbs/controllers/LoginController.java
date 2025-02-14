@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 import com.bbs.services.DetailsServiceImpl;
 
 @Controller
@@ -31,7 +31,7 @@ public class LoginController {
 	@GetMapping("/hello")
 	public String hello(Model model) throws IOException {
 		String username = "Unknown";
-		Details details = new Details();
+		UserDetails details = new UserDetails();
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 		    username = authentication.getName();
@@ -40,7 +40,7 @@ public class LoginController {
 		    role=role.substring(0, role.length()-1);
 		    System.out.println(role);
 		    model.addAttribute("role",role);
-		    Optional<Details> optional = service.findOptionalByUsername(username);
+		    Optional<UserDetails> optional = service.findOptionalByUsername(username);
 		    details = optional.get();
 		}
 		model.addAttribute("details", details);

@@ -13,12 +13,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="messages")
+@Table(name="Messages")
 public class Message {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer mid;
+	private Integer id;
 	
 	@Column
 	private String title;
@@ -27,28 +27,26 @@ public class Message {
 	@Nationalized
 	private String message;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="did")
-	private Details author;
+	@ManyToOne
+	private UserDetails userDetails;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="mfid")
-	private MessageForum forum;
+	@ManyToOne
+	private MessageForum messageForum;
 	
 	public Message() {}
 	
-	public Message(String title, String message, Details author, MessageForum forum) {
+	public Message(String title, String message, UserDetails userDetails, MessageForum messageForum) {
 		this.title = title;
 		this.message = message;
-		this.author = author;
-		this.forum = forum;
+		this.userDetails = userDetails;
+		this.messageForum = messageForum;
 	}
 
-	public Integer getMid() {
-		return mid;
+	public Integer getId() {
+		return id;
 	}
-	public void setId(Integer mid) {
-		this.mid = mid;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public String getTitle() {
 		return title;
@@ -63,24 +61,24 @@ public class Message {
 		this.message = message;
 	}
 	
-	public Details getAuthor() {
-		return author;
+	public UserDetails getUserDetails() {
+		return userDetails;
 	}
-	public void setAuthor(Details author) {
-		this.author = author;
-	}
-
-	public MessageForum getForum() {
-		return forum;
+	public void setUserDetails(UserDetails userDetails) {
+		this.userDetails = userDetails;
 	}
 
-	public void setForum(MessageForum forum) {
-		this.forum = forum;
+	public MessageForum getMessageForum() {
+		return messageForum;
+	}
+
+	public void setMessageForum(MessageForum messageForum) {
+		this.messageForum = messageForum;
 	}
 
 	@Override
 	public String toString() {
-		return "Message [id=" + mid + ", title=" + title + ", message=" + message + "]";
+		return "Message [id=" + id + ", title=" + title + ", message=" + message + "]";
 	}
 
 }

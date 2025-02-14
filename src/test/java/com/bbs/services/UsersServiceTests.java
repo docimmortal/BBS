@@ -7,15 +7,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bbs.entites.User;
 
 import jakarta.transaction.Transactional;
 
-@ExtendWith(SpringExtension.class)
 @Transactional
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsersServiceTests {
 
 	@Autowired
@@ -27,6 +28,7 @@ public class UsersServiceTests {
 	@Test
 	public void testSave() {
 		User user = new User("fred", passwordEncoder.encode("Pass123"), true);
+		System.out.println(passwordEncoder.encode("Iansch00l"));
 		user=service.save(user);
 		assertEquals(3, user.getId());
 	}

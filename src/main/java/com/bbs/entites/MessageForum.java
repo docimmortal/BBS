@@ -2,6 +2,7 @@ package com.bbs.entites;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,12 +15,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="message_forums")
+@Table(name="Message_Forums")
 public class MessageForum {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer mfid;
+	private Integer id;
 	
 	@Column
 	private String name;
@@ -27,15 +28,7 @@ public class MessageForum {
 	@Column
 	private String description;
 
-	@JoinTable(
-			name="message_forum_messages",
-			joinColumns = {@JoinColumn(
-					name="mfpk",
-					referencedColumnName = "mfid")},
-			inverseJoinColumns = {@JoinColumn(
-	                name = "mpk",
-	                referencedColumnName = "mid")})
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="messageForum",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
 	
 	public MessageForum() {}
@@ -45,12 +38,12 @@ public class MessageForum {
 		this.description = description;
 	}
 
-	public Integer getMfid() {
-		return mfid;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setMfid(Integer mfid) {
-		this.mfid = mfid;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -79,7 +72,7 @@ public class MessageForum {
 
 	@Override
 	public String toString() {
-		return "MessageForum [id=" + mfid + ", name=" + name + ", description=" + description + "]";
+		return "MessageForum [id=" + id + ", name=" + name + ", description=" + description + "]";
 	}
 	
 }

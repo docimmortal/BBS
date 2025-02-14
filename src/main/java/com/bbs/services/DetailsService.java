@@ -3,11 +3,11 @@ package com.bbs.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 
 public interface DetailsService {
 
-	public Optional<Details> findOptionalByUsername(String username);
-	public Details save(Details details);
-	public List<Details> findAll();
+	public Optional<UserDetails> findOptionalByUsername(String username);
+	public UserDetails save(UserDetails details);
+	public List<UserDetails> findAll();
 }

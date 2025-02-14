@@ -1,8 +1,8 @@
 package com.bbs.entites;
 
 import java.util.List;
-import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,12 +16,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="Details")
-public class Details {
+@Table(name="User_Details")
+public class UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer did;
+	private Integer id;
 	
 	@Column
 	private String username;
@@ -39,31 +39,24 @@ public class Details {
 	@Column
 	private byte[] photo;
 	
-	@JoinTable(name="details_messages",
-			joinColumns = { @JoinColumn(
-					name="dpk",
-					referencedColumnName = "did")},
-			inverseJoinColumns = {@JoinColumn(
-	                name = "mpk",
-	                referencedColumnName = "mid")})
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="userDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
 	
-	public Details() {}
+	public UserDetails() {}
 
-	public Details(String username, String firstName, String lastName, String email) {
+	public UserDetails(String username, String firstName, String lastName, String email) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 	}
 
-	public Integer getDid() {
-		return did;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setDid(Integer did) {
-		this.did = did;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getUsername() {

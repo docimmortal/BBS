@@ -16,16 +16,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 import com.bbs.utilities.ImageUtilities;
 
 import jakarta.transaction.Transactional;
 
-@ExtendWith(SpringExtension.class)
 @Transactional
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class DetailsServiceImplTests {
 
 	@Autowired
@@ -33,13 +34,13 @@ public class DetailsServiceImplTests {
 	
 	@Test
 	public void testfindByUsername() {
-		Optional<Details> optional = service.findOptionalByUsername("bob");
+		Optional<UserDetails> optional = service.findOptionalByUsername("bob");
 		assertTrue(optional.isPresent());
 	}
 	
 	@Test
 	public void testSaveNewDetails() {
-		Details details = new Details("amy","Amy","Jones","a.j@email.com");
+		UserDetails details = new UserDetails("amy","Amy","Jones","a.j@email.com");
 		try {
 			BufferedImage image = ImageUtilities.getImageFromFile("none.jpg",true);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -50,12 +51,12 @@ public class DetailsServiceImplTests {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		assertNotNull(details.getDid());
+		assertNotNull(details.getId());
 	}
 	
 	@Test
 	public void testFindAll() {
-		List<Details> list = service.findAll();
+		List<UserDetails> list = service.findAll();
 		assertEquals(2, list.size());
 	}
 }

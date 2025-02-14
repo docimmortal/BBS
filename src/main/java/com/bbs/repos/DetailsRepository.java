@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 
 @Repository
-public interface DetailsRepository extends JpaRepository<Details, Integer> {
+public interface DetailsRepository extends JpaRepository<UserDetails, Integer> {
 
-	public Optional<Details> findOptionalByUsername(String username);
+	public Optional<UserDetails> findOptionalByUsername(String username);
 }

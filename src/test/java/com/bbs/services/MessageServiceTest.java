@@ -11,17 +11,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
 
 import jakarta.transaction.Transactional;
 
-@ExtendWith(SpringExtension.class)
 @Transactional
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class MessageServiceTest {
 
 	@Autowired
@@ -33,71 +34,80 @@ public class MessageServiceTest {
 	@Autowired
 	private MessageForumService mfService;
 	
-	private Details author;
+	private UserDetails author;
 	private MessageForum forum;
 	
 	@BeforeEach
 	public void before() {
-		author = new Details("amy","Amy","Jones","a.j@email.com");
+		author = new UserDetails("amy","Amy","Jones","a.j@email.com");
 		author=dService.save(author);
 		forum = new MessageForum("Boring","Boring stuff");
 		forum = mfService.save(forum);
 	}
 	
 	@Test
+	@Transactional
 	public void testSave() {
 		Message message = new Message("The Title","This is a test", author, forum);
 		message = service.save(message);
-		assertNotNull(message.getMid());
-		System.out.println("MID: "+message.getMid());
-		MessageForum forum = message.getForum();
-		assertNotNull(forum.getMfid());
-		System.out.println("MFID: "+forum.getMfid());
-		Details details = message.getAuthor();
-		assertNotNull(details.getDid());
-		System.out.println("DID: "+details.getDid());
+		assertNotNull(message.getId());
+		System.out.println("MID: "+message.getId());
+		MessageForum forum = message.getMessageForum();
+		assertNotNull(forum.getId());
+		System.out.println("MFID: "+forum.getId());
+		UserDetails details = message.getUserDetails();
+		assertNotNull(details.getId());
+		System.out.println("DID: "+details.getId());
 	}
 	
 	@Test
+	@Transactional
+	// Not sure why this fails
 	public void testSaveToAutopopulatedData() {
-		Optional<Details> dOptional = dService.findOptionalByUsername("bob");
+		Optional<UserDetails> dOptional = dService.findOptionalByUsername("bob");
 		assertTrue(dOptional.isPresent());
-		Details author1 = dOptional.get();
+		UserDetails author1 = dOptional.get();
+		
+		Optional<Message> optional = service.findById(1);
+		assertTrue(optional.isEmpty());
+		
+		
 		Optional<MessageForum> mfOptional = mfService.findById(1);
 		assertTrue(mfOptional.isPresent());
 		MessageForum forum1 = mfOptional.get();
 		Message message = new Message("The Title","This is a test", author1, forum1);
 		message = service.save(message);
-		assertNotNull(message.getMid());
-		assertEquals(3, message.getMid());
-		Details details = message.getAuthor();
-		assertEquals(1, details.getDid());
-		MessageForum mForum = message.getForum();
-		assertEquals(1, mForum.getMfid());
+		assertNotNull(message.getId());
+		assertEquals(3, message.getId());
+		UserDetails details = message.getUserDetails();
+		assertEquals(1, details.getId());
+		MessageForum mForum = message.getMessageForum();
+		assertEquals(1, mForum.getId());
 		
 		// Refetch
-		Optional<Message> optional = service.findById(3);
-		assertTrue(optional.isPresent());
-		message = optional.get();
-		assertEquals(3, message.getMid());
-		details = message.getAuthor();
+		Optional<Message> optional3 = service.findById(3);
+		assertTrue(optional3.isPresent());
+		message = optional3.get();
+		assertEquals(3, message.getId());
+		details = message.getUserDetails();
 		assertNotNull(details);
-		MessageForum forum = message.getForum();
+		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum);
 	}
 
 	@Test
+	@Transactional
 	public void testFindById() {
 		Optional<Message> optional = service.findById(1);
 		assertTrue(optional.isPresent());
 		Message message = optional.get();
-		assertEquals(1, message.getMid());
+		assertEquals(1, message.getId());
 		assertEquals("Hello!",message.getTitle());
 		assertEquals("This is a test message.", message.getMessage());
 		// I guess there is a database issue because testSaveToAutopopulatedData works.
-		Details detail = message.getAuthor();
+		UserDetails detail = message.getUserDetails();
 		assertNotNull(detail);
-		MessageForum forum = message.getForum();
+		MessageForum forum = message.getMessageForum();
 		assertNotNull(forum);
 	}
 }

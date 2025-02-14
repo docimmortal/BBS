@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bbs.entites.Authority;
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 import com.bbs.entites.User;
 import com.bbs.services.AuthoritiesService;
 import com.bbs.services.DetailsService;
@@ -33,7 +33,7 @@ public class UsersController {
 	
 	@PostMapping("/getUsers")
 	public String displayUsers(Model model) {
-		List<Details> users = service.findAll();
+		List<UserDetails> users = service.findAll();
 		model.addAttribute("users", users);
 		return "users/listUsers";
 	}
@@ -46,9 +46,9 @@ public class UsersController {
 		uService.save(user);
 		Authority authority = new Authority(username,"ROLE_USER");
 		aService.save(authority);
-		Details details = new Details(username, firstName, lastName, email);
+		UserDetails details = new UserDetails(username, firstName, lastName, email);
 		service.save(details);
-		List<Details> users = service.findAll();
+		List<UserDetails> users = service.findAll();
 		model.addAttribute("users", users);
 		return "users/listUsers";
 	}

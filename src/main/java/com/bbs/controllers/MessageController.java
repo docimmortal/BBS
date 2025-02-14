@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 import com.bbs.entites.Message;
 import com.bbs.services.DetailsService;
 import com.bbs.services.MessageService;
@@ -35,8 +35,8 @@ public class MessageController {
 			Object obj = request.getAttribute("id");
 			id = obj.toString();
 		}
-		Optional<Details> optional = dService.findOptionalByUsername("bob");
-		Details d = optional.get();
+		Optional<UserDetails> optional = dService.findOptionalByUsername("bob");
+		UserDetails d = optional.get();
 		Optional<Message> moptional = mService.findById(Integer.parseInt(id));
 		Message message  = null;
 		if (moptional.isPresent()) {

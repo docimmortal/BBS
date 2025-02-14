@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.bbs.entites.Details;
+import com.bbs.entites.UserDetails;
 
 import jakarta.transaction.Transactional;
 
@@ -26,13 +26,13 @@ public class DetailsRepositoryTests {
 	
 	@Test
 	public void testFindAll() {
-		List<Details> details = repo.findAll();
+		List<UserDetails> details = repo.findAll();
 		assertEquals(2, details.size());
 	}
 	
 	@Test
 	public void testFindByUsername() {
-		Optional<Details> optional = repo.findOptionalByUsername("bob");
+		Optional<UserDetails> optional = repo.findOptionalByUsername("bob");
 		assertTrue(optional.isPresent());
 	}
 }

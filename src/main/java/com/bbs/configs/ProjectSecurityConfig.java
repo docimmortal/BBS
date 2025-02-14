@@ -16,12 +16,16 @@ public class ProjectSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests().requestMatchers("/h2-console/**").permitAll()
+        .and().csrf().ignoringRequestMatchers("/h2-console/**")
+        .and().headers().frameOptions().sameOrigin();
 		http.csrf().disable().authorizeHttpRequests()
 		.requestMatchers("/images/**").permitAll()
 		.anyRequest().authenticated()
 		.and().httpBasic()
 		.and().logout().permitAll()
 		.and().formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/hello", true).permitAll());
+		http.headers().frameOptions().disable();
 		return http.build();
 	}
 	
