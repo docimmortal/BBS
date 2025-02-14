@@ -1,5 +1,7 @@
 package com.bbs.entites;
 
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.Nationalized;
 
 import jakarta.persistence.Column;
@@ -27,6 +29,9 @@ public class Message {
 	@Nationalized
 	private String message;
 	
+	@Column
+	private LocalDateTime timestamp;
+	
 	@ManyToOne
 	private UserDetails userDetails;
 	
@@ -40,6 +45,19 @@ public class Message {
 		this.message = message;
 		this.userDetails = userDetails;
 		this.messageForum = messageForum;
+		this.timestamp = LocalDateTime.now();
+		this.userDetails=userDetails;
+		this.messageForum=messageForum;
+	}
+	
+	public Message(String title, String message, LocalDateTime timestamp, UserDetails userDetails, MessageForum messageForum) {
+		this.title = title;
+		this.message = message;
+		this.userDetails = userDetails;
+		this.messageForum = messageForum;
+		this.timestamp = timestamp;
+		this.userDetails=userDetails;
+		this.messageForum=messageForum;
 	}
 
 	public Integer getId() {
@@ -61,6 +79,14 @@ public class Message {
 		this.message = message;
 	}
 	
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(LocalDateTime timestamp) {
+		this.timestamp = timestamp;
+	}
+
 	public UserDetails getUserDetails() {
 		return userDetails;
 	}

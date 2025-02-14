@@ -1,5 +1,6 @@
 package com.bbs.entites;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -39,6 +40,9 @@ public class UserDetails {
 	@Column
 	private byte[] photo;
 	
+	@Column(name="last_login")
+	private LocalDateTime lastLogin;
+	
 	@OneToMany(mappedBy="userDetails",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
 	
@@ -49,6 +53,7 @@ public class UserDetails {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.lastLogin = LocalDateTime.now();
 	}
 
 	public Integer getId() {
@@ -98,6 +103,14 @@ public class UserDetails {
 
 	public void setPhoto(byte[] photo) {
 		this.photo = photo;
+	}
+	
+	public LocalDateTime getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(LocalDateTime lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 
 	public List<Message> getMessages() {

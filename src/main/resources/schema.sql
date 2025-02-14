@@ -20,6 +20,7 @@ CREATE TABLE User_Details(
 	last_name VARCHAR(60) NOT NULL,
 	email VARCHAR(120) NOT NULL,
 	photo BLOB,
+	last_login TIMESTAMP,
 	PRIMARY KEY(id)
 );
 
@@ -36,8 +37,14 @@ CREATE TABLE Messages(
 	message CLOB,
 	user_details_id bigint NOT NULL,
 	message_forum_id bigint NOT NULL,
+	timestamp TIMESTAMP,
 	PRIMARY KEY(id),
 	foreign key(user_details_id) references User_Details(id),
 	foreign key(message_forum_id) references Message_Forums(id)
 );
 
+CREATE TABLE Last_Read_Messages(
+	user_details_id bigint,
+	message_forum_id bigint,
+	message_id bigint
+);
