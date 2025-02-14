@@ -1,5 +1,6 @@
 package com.bbs.services;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class MessageForumServiceImpl implements MessageForumService {
 	}
 
 	@Override
-	public Optional<MessageForum> findById(Integer id) {
+	public Optional<MessageForum> findById(BigInteger id) {
 		return repo.findById(id);
 	}
 

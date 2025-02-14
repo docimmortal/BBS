@@ -1,6 +1,6 @@
 package com.bbs.controllers;
 
-import java.util.List;
+import java.math.BigInteger;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
-import com.bbs.entites.UserDetails;
+//import com.bbs.entites.UserDetails;
 import com.bbs.entites.Message;
-import com.bbs.services.DetailsService;
+//import com.bbs.services.DetailsService;
 import com.bbs.services.MessageService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +25,8 @@ public class MessageController {
 	@Autowired
 	private MessageService mService;
 	
-	@Autowired
-	private DetailsService dService;
+	//@Autowired
+	//private DetailsService dService;
 	
 	@PostMapping("/readMessage")
 	public String readMessage(@RequestParam(required = false, defaultValue="") String id, Model model, HttpServletRequest request) {
@@ -35,9 +35,9 @@ public class MessageController {
 			Object obj = request.getAttribute("id");
 			id = obj.toString();
 		}
-		Optional<UserDetails> optional = dService.findOptionalByUsername("bob");
-		UserDetails d = optional.get();
-		Optional<Message> moptional = mService.findById(Integer.parseInt(id));
+		//Optional<UserDetails> optional = dService.findOptionalByUsername("bob");
+		//UserDetails d = optional.get();
+		Optional<Message> moptional = mService.findById(new BigInteger(id));
 		Message message  = null;
 		if (moptional.isPresent()) {
 			System.out.println("Found a real message!");
@@ -56,6 +56,7 @@ public class MessageController {
 		request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
 		ModelAndView mav = new ModelAndView("forward:/readMessage");
 		Integer iid = Integer.parseInt(messageId);
+		//Integer fid = Integer.parseInt(messageForumId);
 		// pretend to find next iid.
 		if (action.equalsIgnoreCase("Next")) {
 			iid++;

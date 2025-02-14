@@ -1,5 +1,6 @@
 package com.bbs.services;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class MessageServiceImpl implements MessageService {
 	private MessageRepository repo;
 	
 	@Override
-	public Optional<Message> findById(Integer id) {
+	public Optional<Message> findById(BigInteger id) {
 		return repo.findById(id);
 	}
 

@@ -4,15 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bbs.entites.UserDetails;
 import com.bbs.entites.Message;
@@ -68,11 +67,11 @@ public class MessageServiceTest {
 		assertTrue(dOptional.isPresent());
 		UserDetails author1 = dOptional.get();
 		
-		Optional<Message> optional = service.findById(1);
+		Optional<Message> optional = service.findById(BigInteger.valueOf(1));
 		assertTrue(optional.isEmpty());
 		
 		
-		Optional<MessageForum> mfOptional = mfService.findById(1);
+		Optional<MessageForum> mfOptional = mfService.findById(BigInteger.valueOf(1));
 		assertTrue(mfOptional.isPresent());
 		MessageForum forum1 = mfOptional.get();
 		Message message = new Message("The Title","This is a test", author1, forum1);
@@ -85,7 +84,7 @@ public class MessageServiceTest {
 		assertEquals(1, mForum.getId());
 		
 		// Refetch
-		Optional<Message> optional3 = service.findById(3);
+		Optional<Message> optional3 = service.findById(BigInteger.valueOf(3));
 		assertTrue(optional3.isPresent());
 		message = optional3.get();
 		assertEquals(3, message.getId());
@@ -98,7 +97,7 @@ public class MessageServiceTest {
 	@Test
 	@Transactional
 	public void testFindById() {
-		Optional<Message> optional = service.findById(1);
+		Optional<Message> optional = service.findById(BigInteger.valueOf(1));
 		assertTrue(optional.isPresent());
 		Message message = optional.get();
 		assertEquals(1, message.getId());

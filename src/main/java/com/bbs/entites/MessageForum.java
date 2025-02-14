@@ -1,5 +1,6 @@
 package com.bbs.entites;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -9,8 +10,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -20,7 +19,7 @@ public class MessageForum {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private BigInteger id;
 	
 	@Column
 	private String name;
@@ -38,11 +37,11 @@ public class MessageForum {
 		this.description = description;
 	}
 
-	public Integer getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

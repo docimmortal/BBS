@@ -1,5 +1,7 @@
 package com.bbs.entites;
 
+import java.math.BigInteger;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +13,7 @@ import jakarta.persistence.Table;
 public class User {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private BigInteger id;
     private String username, password;
     private boolean enabled;
     
@@ -24,11 +26,11 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Integer getId() {
+	public BigInteger getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
