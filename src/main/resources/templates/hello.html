@@ -10,7 +10,6 @@
 <body class="container">
 	<div th:insert="fragments/navbar" id="navbar"></div>
 
-
 	<h1 class="w3-container w3-clear w3-theme w3-card">Profile</h1>
 
 	<div class="flex-container">
@@ -38,11 +37,11 @@
 	</div> <!--  END flex -->
 	<form th:action="@{/readMessage}" method="post" action="">
 		<input type="hidden" name="id" value="1">
-		<button name="action" value="Read Messages">Read Messages</button>
+		<button class="w3-theme" name="action" value="Read Messages">Read Messages</button>
 	</form>
 	<form th:action="@{/getUsers}" method="post" action="">
 		<div sec:authorize="hasAuthority('ROLE_ADMIN')">
-			<button name="action" value="List Users">List Users</button>
+			<button class="w3-theme" name="action" value="List Users">List Users</button>
 		</div>
 	</form>
 </body>

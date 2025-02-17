@@ -13,7 +13,7 @@
 
 	<h1 class="w3-container w3-clear w3-theme w3-card" th:text="${message.messageForum.name}"></h1>
 
-	<form th:action="@{/navigate}" method="post" action="">
+	
 		<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.userDetails.username}" readonly><br>
 		
 		<label class="w3-theme" for="title">Title</label><input type="text" name="title" id="title" th:value="${message.title}" readonly><br>
@@ -21,13 +21,44 @@
 		<label class="w3-theme" for="timestamp">Date</label><input type="text" name="timestamp" id="timestamp" th:value="${#temporals.format(message.timestamp,'MM/dd/yyyy hh:mm a')}" readonly><br>
 	
 		
-		<textarea th:field="${message.message}" name="messageText" readonly></textarea>
-	
+		<textarea class="message mainMessage" th:field="${message.message}" name="messageText" readonly></textarea><br>
+		
+		<button id="mainReplyButton" class="firstButton w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
+		
+		<div class="hide inner" id="replyToMain">
+			<h2>Reply</h2>
+			<form th:action="@{/saveReply}" method="post" action="">
+				<textarea id="mainReplyId"  class="replyMessage"  name="messageText"></textarea><br>
+				<button class="w3-theme-dark" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Cancel</button>
+				<input class="w3-theme" type="submit" value="Save">
+			</form>
+		</div>
+		
+	<form th:action="@{/navigate}" method="post" action="">
 		<input type="hidden" name="messageId" th:value="${message.id}">
 		<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}">
 		
-		<button name="action" value="Next">Next</button>
+		<button id="next" class="w3-theme" name="action" value="Next">Next</button>
+		
 	</form>
+	
+	<script>
+		function toggleReply(event,divId, buttonId) {
+  			var div = document.getElementById(divId);
+  			var btn = document.getElementById(buttonId);
+  			var next = document.getElementById('next');
+  			if (div.classList.contains('hide')) {
+  				div.classList.remove('hide');
+  				btn.classList.add('hide');
+  				next.classList.add('hide');
+  			} else {
+  				div.classList.add('hide');
+  				btn.classList.remove('hide');
+  				next.classList.remove('hide');
+  			}
+  			event.preventDefault();
+		}
+	</script>
 
 </body>
 </html>
