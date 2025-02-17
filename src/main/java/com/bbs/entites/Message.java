@@ -1,21 +1,33 @@
 package com.bbs.entites;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.Nationalized;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="Messages")
-public class Message {
+@Getter @Setter @NoArgsConstructor 
+public class Message implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +49,9 @@ public class Message {
 	@ManyToOne
 	private MessageForum messageForum;
 	
-	public Message() {}
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="id")
+	private List<Message> replies;
 	
 	public Message(String title, String message, UserDetails userDetails, MessageForum messageForum) {
 		this.title = title;
@@ -57,48 +71,6 @@ public class Message {
 		this.timestamp = timestamp;
 		this.userDetails=userDetails;
 		this.messageForum=messageForum;
-	}
-
-	public BigInteger getId() {
-		return id;
-	}
-	public void setId(BigInteger id) {
-		this.id = id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public UserDetails getUserDetails() {
-		return userDetails;
-	}
-	public void setUserDetails(UserDetails userDetails) {
-		this.userDetails = userDetails;
-	}
-
-	public MessageForum getMessageForum() {
-		return messageForum;
-	}
-
-	public void setMessageForum(MessageForum messageForum) {
-		this.messageForum = messageForum;
 	}
 
 	@Override

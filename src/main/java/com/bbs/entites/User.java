@@ -1,23 +1,37 @@
 package com.bbs.entites;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Users")
-public class User {
+@Getter @Setter @NoArgsConstructor 
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
-    private String username, password;
+	
+	@Column
+    private String username;
+	
+	@Column
+    private String password;
+	
+	@Column
     private boolean enabled;
-    
-    public User() {}
 
     public User(String username, String password, boolean enabled) {
 		super();
@@ -25,37 +39,5 @@ public class User {
 		this.password = password;
 		this.enabled = enabled;
 	}
-
-	public BigInteger getId() {
-        return id;
-    }
-
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
     
 }

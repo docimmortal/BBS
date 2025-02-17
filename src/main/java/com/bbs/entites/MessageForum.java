@@ -1,5 +1,6 @@
 package com.bbs.entites;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -12,10 +13,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="Message_Forums")
-public class MessageForum {
+@Getter @Setter @NoArgsConstructor 
+public class MessageForum implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,43 +37,9 @@ public class MessageForum {
 	@OneToMany(mappedBy="messageForum",fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Message> messages;
 	
-	public MessageForum() {}
-	
 	public MessageForum(String name, String description) {
 		this.name = name;
 		this.description = description;
-	}
-
-	public BigInteger getId() {
-		return id;
-	}
-
-	public void setId(BigInteger id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public List<Message> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
 	}
 
 	@Override

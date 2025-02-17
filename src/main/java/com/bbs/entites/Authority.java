@@ -1,16 +1,26 @@
 package com.bbs.entites;
 
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Authorities")
-public class Authority {
+@Getter @Setter @NoArgsConstructor 
+public class Authority implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
@@ -18,36 +28,10 @@ public class Authority {
 	private String username;
 	
 	private String authority;
-	
-	public Authority() {}
 
 	public Authority(String username, String authority) {
 		super();
 		this.username = username;
-		this.authority = authority;
-	}
-
-	public BigInteger getId() {
-		return id;
-	}
-
-	public void setId(BigInteger id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(String authority) {
 		this.authority = authority;
 	}
 	
