@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.Nationalized;
 
@@ -52,6 +53,9 @@ public class Message implements Serializable{
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="id")
 	private List<Message> replies;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	private Set<Reaction> reactions;
 	
 	public Message(String title, String message, UserDetails userDetails, MessageForum messageForum) {
 		this.title = title;
