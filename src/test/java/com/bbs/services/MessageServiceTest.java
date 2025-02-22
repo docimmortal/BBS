@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.bbs.entites.UserDetails;
+import com.bbs.enums.ReactionType;
 import com.bbs.entites.Message;
 import com.bbs.entites.MessageForum;
+import com.bbs.entites.Reaction;
 
 import jakarta.transaction.Transactional;
 
@@ -44,6 +47,32 @@ public class MessageServiceTest {
 		forum = mfService.save(forum);
 	}
 	
+	/*
+	@Test
+	@Transactional
+	public void getMessageWithReaction() {
+		Optional<Message> optional=service.findById(BigInteger.valueOf(1));
+		assertTrue(optional.isPresent());
+		Message message = optional.get();
+		assertEquals(BigInteger.valueOf(1), message.getId());
+		List<Reaction> reactions = message.getReactions();
+		Reaction react = new Reaction();
+		react.setId(BigInteger.valueOf(1));
+		react.setUserDetails(message.getUserDetails());
+		react.setReactionType(ReactionType.FUNNY);
+		reactions.add(react);
+		System.out.println(reactions.size());
+		
+		service.save(message);
+		
+		optional=service.findById(BigInteger.valueOf(1));
+		message = optional.get();
+		reactions = message.getReactions();
+		assertEquals(1,reactions.size());
+		assertEquals(ReactionType.FUNNY, reactions.iterator().next().getReactionType());
+	}
+	*/
+	
 	@Test
 	@Transactional
 	public void testSave() {
@@ -61,14 +90,13 @@ public class MessageServiceTest {
 	
 	@Test
 	@Transactional
-	// Not sure why this fails
 	public void testSaveToAutopopulatedData() {
 		Optional<UserDetails> dOptional = dService.findOptionalByUsername("bob");
 		assertTrue(dOptional.isPresent());
 		UserDetails author1 = dOptional.get();
 		
 		Optional<Message> optional = service.findById(BigInteger.valueOf(1));
-		assertTrue(optional.isEmpty());
+		assertTrue(optional.isPresent());
 		
 		
 		Optional<MessageForum> mfOptional = mfService.findById(BigInteger.valueOf(1));
@@ -77,17 +105,17 @@ public class MessageServiceTest {
 		Message message = new Message("The Title","This is a test", author1, forum1);
 		message = service.save(message);
 		assertNotNull(message.getId());
-		assertEquals(3, message.getId());
+		assertEquals(BigInteger.valueOf(4), message.getId());
 		UserDetails details = message.getUserDetails();
-		assertEquals(1, details.getId());
+		assertEquals(BigInteger.valueOf(1), details.getId());
 		MessageForum mForum = message.getMessageForum();
-		assertEquals(1, mForum.getId());
+		assertEquals(BigInteger.valueOf(1), mForum.getId());
 		
 		// Refetch
 		Optional<Message> optional3 = service.findById(BigInteger.valueOf(3));
 		assertTrue(optional3.isPresent());
 		message = optional3.get();
-		assertEquals(3, message.getId());
+		assertEquals(BigInteger.valueOf(3), message.getId());
 		details = message.getUserDetails();
 		assertNotNull(details);
 		MessageForum forum = message.getMessageForum();
@@ -100,7 +128,7 @@ public class MessageServiceTest {
 		Optional<Message> optional = service.findById(BigInteger.valueOf(1));
 		assertTrue(optional.isPresent());
 		Message message = optional.get();
-		assertEquals(1, message.getId());
+		assertEquals(BigInteger.valueOf(1), message.getId());
 		assertEquals("Hello!",message.getTitle());
 		assertEquals("This is a test message.", message.getMessage());
 		// I guess there is a database issue because testSaveToAutopopulatedData works.

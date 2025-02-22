@@ -11,4 +11,6 @@ public interface MessageForumService {
 	public MessageForum save(MessageForum forum);
 	public List<MessageForum> findAll();
 	public Optional<MessageForum> findById(BigInteger id);
+	
+	public boolean existsNextMessageForum(BigInteger id);
 }

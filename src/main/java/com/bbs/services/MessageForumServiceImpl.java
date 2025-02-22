@@ -31,6 +31,8 @@ public class MessageForumServiceImpl implements MessageForumService {
 		return repo.findById(id);
 	}
 
-
-
+	@Override
+	public boolean existsNextMessageForum(BigInteger id) {
+		return repo.existsNextMessageForum(id);
+	}
 }

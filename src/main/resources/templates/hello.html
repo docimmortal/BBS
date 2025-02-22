@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Hello</title>
 <link th:href="@{/css/styles.css}" rel="stylesheet" />
 <link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
@@ -36,7 +37,8 @@
 		</div>
 	</div> <!--  END flex -->
 	<form th:action="@{/readMessage}" method="post" action="">
-		<input type="hidden" name="id" value="1">
+		<input type="hidden" name="messageId" value="0">
+		<input type="hidden" name="messageForumId" value="1">
 		<button class="w3-theme" name="action" value="Read Messages">Read Messages</button>
 	</form>
 	<form th:action="@{/getUsers}" method="post" action="">

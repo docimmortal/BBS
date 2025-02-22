@@ -1,6 +1,8 @@
 package com.bbs.controllers;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
-//import com.bbs.entites.UserDetails;
+import com.bbs.entites.UserDetails;
 import com.bbs.entites.Message;
-//import com.bbs.services.DetailsService;
+import com.bbs.entites.MessageForum;
+import com.bbs.entites.Reaction;
+import com.bbs.entites.Reply;
+import com.bbs.enums.ReactionType;
+import com.bbs.services.DetailsService;
+import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
+import com.bbs.services.ReplyService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -25,19 +33,21 @@ public class MessageController {
 	@Autowired
 	private MessageService mService;
 	
-	//@Autowired
-	//private DetailsService dService;
+	@Autowired
+	private MessageForumService mfService;
 	
 	@PostMapping("/readMessage")
-	public String readMessage(@RequestParam(required = false, defaultValue="") String id, Model model, HttpServletRequest request) {
+	public String readMessage(@RequestParam(required = false, defaultValue="0") String messageId, 
+			@RequestParam(required = false, defaultValue="1") String messageForumId,
+			Model model, HttpServletRequest request) {
 		
-		if (id.isEmpty()) { // we are coming from "/navigate"s
-			Object obj = request.getAttribute("id");
-			id = obj.toString();
+		System.out.println("Message ID: "+messageId+", Message Forum ID: "+messageForumId);
+		if (messageId.isEmpty()) { // we are coming from "/navigate"s
+			Object obj = request.getAttribute("messageId");
+			messageId = obj.toString();
 		}
-		//Optional<UserDetails> optional = dService.findOptionalByUsername("bob");
-		//UserDetails d = optional.get();
-		Optional<Message> moptional = mService.findById(new BigInteger(id));
+		
+		Optional<Message> moptional = mService.findNextInMessageForum(new BigInteger(messageId),new BigInteger(messageForumId));
 		Message message  = null;
 		if (moptional.isPresent()) {
 			System.out.println("Found a real message!");
@@ -45,7 +55,35 @@ public class MessageController {
 		} else {
 			message = new Message(); // temp for now.
 		}
+		boolean hasNext = mService.existsNextInMessageForum(message.getId(), message.getMessageForum().getId());
+		if (!hasNext) {
+			BigInteger currentForum=message.getMessageForum().getId();
+			System.out.println("Previous forum: "+currentForum);
+			// check to see if a next forum exist
+			boolean nextForum = mfService.existsNextMessageForum(currentForum);
+			boolean nextForumHasMessage = false;
+			while (nextForum && !nextForumHasMessage) {
+				currentForum=currentForum.add(BigInteger.ONE); // get next forum number
+				// hard code message of next forum to 0 to find next message in that forum
+				nextForumHasMessage = mService.existsNextInMessageForum(BigInteger.ZERO, currentForum);
+				if (nextForumHasMessage) {
+					System.out.println(" and it has messages!");
+				} else {
+					System.out.println(" but it has no new messages!");
+				}
+				if (!nextForumHasMessage) {
+					// That forum does not have next messages. Try next one, if one exists.
+					nextForum = mfService.existsNextMessageForum(currentForum);
+				}
+			}
+			if (nextForumHasMessage) {
+				model.addAttribute("nextForumHasMessage", nextForumHasMessage);
+				model.addAttribute("nextForumId",currentForum);
+			}
+		}
+		
 		model.addAttribute("message",message);
+		model.addAttribute("hasNext", hasNext);
 		return "messages/readMessage";
 	}
 	

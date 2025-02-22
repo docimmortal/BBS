@@ -2,10 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
 <head>
 <meta charset="ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Hello</title>
 <link th:href="@{/css/styles.css}" rel="stylesheet" />
 <link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
 <link th:href="@{/css/themes/green.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/fontawesome.min.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/brands.min.css}" rel="stylesheet" />
+<link th:href="@{/css/themes/solid.min.css}" rel="stylesheet" />
 </head>
 <body class="container">
 	<div th:insert="fragments/navbar" id="navbar"></div>
@@ -23,7 +27,28 @@
 		
 		<textarea class="message mainMessage" th:field="${message.message}" name="messageText" readonly></textarea><br>
 		
-		<button id="mainReplyButton" class="firstButton w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
+		<!-- 
+		<span th:with="count=1, previousValue=null">
+			<span th:each="reaction: ${message.reactions}">
+				<span th:if="${reaction != null}">WE GOT A REACTION!</span>
+				<span th:if="${previousValue != null}">NOT NULL!</span>
+				<span th:if="${previousValue == null}">NULL!</span>
+				<span th:if="${previousValue != null && previousValue != reaction.reactionType.unicode}">
+					<span th:utext="' '+${count} +' '+${reaction.reactionType.unicode}"></span>
+					<span th:with="count=1"></span>
+					<span>HERE</span>
+				</span>
+				<span th:if="${previousValue == null || previousValue == reaction.reactionType.unicode}">
+					<span th:with="count=${count + 1}"></span>
+				</span>
+				<span th:with="previousValue=${reaction.reactionType.unicode}"></span>
+				<span th:if="${previousValue != null}">NOT NULL!</span>
+				<span th:if="${previousValue == null}">STILL NULL!</span>>
+			</span>
+		</span>
+		<button id="reactButton1" class="firstButton w3-theme" onclick="toggleReaction(event)">React</button>
+
+		<button id="mainReplyButton" class="w3-theme" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Reply</button>
 		
 		<div class="hide inner" id="replyToMain">
 			<h2>Reply</h2>
@@ -33,16 +58,40 @@
 				<input class="w3-theme" type="submit" value="Save">
 			</form>
 		</div>
-		
+		 -->
 	<form th:action="@{/navigate}" method="post" action="">
 		<input type="hidden" name="messageId" th:value="${message.id}">
 		<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}">
 		
+		<span th:if="${hasNext}">
 		<button id="next" class="w3-theme" name="action" value="Next">Next</button>
-		
+		</span>
+		<span th:if="${hasNext==false}">
+		No More Messages.
+		</span>
+		<span th:if="${nextForumHasMessage}">
+			<span th:text="'Forum '+${nextForumId}+' has messages.'"></span>
+		</span>
 	</form>
 	
 	<script>
+		function toggleReaction(event) {
+			const buttonId = event.target.id;
+			const button = document.getElementById(buttonId);
+			var id = buttonId.replace(/[a-z]/gi, ''); // remove letters from id
+			id = "reaction"+id;
+			const element = document.getElementById(id);
+			if (element.classList.contains('react')) {
+				element.classList.remove(...element.classList);
+				button.textContent='React';
+			} else {
+				element.classList.add('react');
+				element.classList.add('fa');
+				element.classList.add('fa-heart');
+				button.textContent='Remove reaction';
+			}
+		}
+		
 		function toggleReply(event,divId, buttonId) {
   			var div = document.getElementById(divId);
   			var btn = document.getElementById(buttonId);

@@ -50,12 +50,11 @@ public class Message implements Serializable{
 	@ManyToOne
 	private MessageForum messageForum;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name="id")
-	private List<Message> replies;
+	//@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true, mappedBy="message")
+	//private List<Reply> replies;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
-	private Set<Reaction> reactions;
+	//@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true, mappedBy="message")
+	//private List<Reaction> reactions;
 	
 	public Message(String title, String message, UserDetails userDetails, MessageForum messageForum) {
 		this.title = title;
