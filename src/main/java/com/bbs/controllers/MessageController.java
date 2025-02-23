@@ -24,6 +24,7 @@ import com.bbs.services.DetailsService;
 import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
 import com.bbs.services.ReplyService;
+import com.bbs.utilities.MenuUtilities;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -84,6 +85,7 @@ public class MessageController {
 		
 		model.addAttribute("message",message);
 		model.addAttribute("hasNext", hasNext);
+		model.addAttribute("menus",MenuUtilities.getMenus());
 		return "messages/readMessage";
 	}
 	

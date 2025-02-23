@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="https://www.thymeleaf.org" 
+	xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -36,15 +38,10 @@
 			<p />
 		</div>
 	</div> <!--  END flex -->
-	<form th:action="@{/readMessage}" method="post" action="">
-		<input type="hidden" name="messageId" value="0">
-		<input type="hidden" name="messageForumId" value="1">
-		<button class="w3-theme" name="action" value="Read Messages">Read Messages</button>
-	</form>
-	<form th:action="@{/getUsers}" method="post" action="">
-		<div sec:authorize="hasAuthority('ROLE_ADMIN')">
+	<div sec:authorize="hasAuthority('ROLE_ADMIN')">
+		<form th:action="@{/getUsers}" method="post" action="">
 			<button class="w3-theme" name="action" value="List Users">List Users</button>
-		</div>
-	</form>
+		</form>
+	</div>
 </body>
 </html>

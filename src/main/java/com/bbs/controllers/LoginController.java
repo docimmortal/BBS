@@ -1,6 +1,8 @@
 package com.bbs.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.bbs.entites.Menu;
 import com.bbs.entites.UserDetails;
+import com.bbs.enums.ReactionType;
 import com.bbs.services.DetailsServiceImpl;
+import com.bbs.utilities.MenuUtilities;
 
 @Controller
 public class LoginController {
@@ -44,8 +49,11 @@ public class LoginController {
 		    details = optional.get();
 		}
 		model.addAttribute("details", details);
-		//BufferedImage bi = ImageUtilities.convertFromClob(details.getPhoto());
-		//model.addAttribute("photo",bi);
+		String unicode=ReactionType.FUNNY.getUnicode();
+		model.addAttribute("unicode",unicode);
+		
+		model.addAttribute("menus",MenuUtilities.getMenus());
+		
 		return "hello";
 	}
 }

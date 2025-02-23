@@ -1,8 +1,10 @@
 <nav class="navbar bg-dark navbar-dark navbar-expand-lg">
     <div class="navbar-nav w-100 ml-auto" th:each="menu : ${menus}">
-        <a class="nav-link" th:href="${menu.url}" th:text="${menu.label}"></a>
+    	<form class="menuOpts" th:action="@{__${menu.url}__}" method="POST">
+    		<button class="w3-theme" name="action" value="${menu.label}"><span th:utext="${menu.label}"/></span></button>
+		</form>
     </div>
-    <form th:action="@{/logout}" method="post">
+    <form class="menuOpts" th:action="@{/logout}" method="POST">
 		<input class="w3-theme" type="submit" value="Sign Out">
 	</form>
 </nav>
