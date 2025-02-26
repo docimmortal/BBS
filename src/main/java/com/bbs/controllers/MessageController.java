@@ -40,6 +40,7 @@ public class MessageController {
 	@PostMapping("/readMessage")
 	public String readMessage(@RequestParam(required = false, defaultValue="0") String messageId, 
 			@RequestParam(required = false, defaultValue="1") String messageForumId,
+			@RequestParam(required = false, defaultValue="") String action,
 			Model model, HttpServletRequest request) {
 		
 		System.out.println("Message ID: "+messageId+", Message Forum ID: "+messageForumId);
@@ -48,7 +49,21 @@ public class MessageController {
 			messageId = obj.toString();
 		}
 		
-		Optional<Message> moptional = mService.findNextInMessageForum(new BigInteger(messageId),new BigInteger(messageForumId));
+		BigInteger prev=new BigInteger(messageId);
+		if (prev.compareTo(BigInteger.ZERO)==1 && !action.equalsIgnoreCase("prev")) {
+			// We have a previous message
+			model.addAttribute("hasPrev", messageId);
+		}
+		
+		Optional<Message> moptional = null;
+		System.out.println("Action is ["+action+"]");
+		if (action.equalsIgnoreCase("next") || action.equals("")) {
+			System.out.println("Getting next message");
+			moptional = mService.findNextInMessageForum(prev,new BigInteger(messageForumId));
+		} else {
+			System.out.println("Getting prev message");
+			moptional = mService.findPrevInMessageForum(prev, new BigInteger(messageForumId));
+		}
 		Message message  = null;
 		if (moptional.isPresent()) {
 			System.out.println("Found a real message!");
@@ -56,6 +71,7 @@ public class MessageController {
 		} else {
 			message = new Message(); // temp for now.
 		}
+
 		boolean hasNext = mService.existsNextInMessageForum(message.getId(), message.getMessageForum().getId());
 		if (!hasNext) {
 			BigInteger currentForum=message.getMessageForum().getId();
@@ -80,6 +96,14 @@ public class MessageController {
 			if (nextForumHasMessage) {
 				model.addAttribute("nextForumHasMessage", nextForumHasMessage);
 				model.addAttribute("nextForumId",currentForum);
+			}
+		}
+		
+		if (action.equalsIgnoreCase("prev")) {
+			// check for a previous
+			Optional<Message> moptionalp = mService.findPrevInMessageForum(message.getId(), new BigInteger(messageForumId));
+			if (moptionalp.isPresent()) {
+				model.addAttribute("hasPrev", moptionalp.get().getId());
 			}
 		}
 		

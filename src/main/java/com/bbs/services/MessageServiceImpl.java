@@ -29,6 +29,12 @@ public class MessageServiceImpl implements MessageService {
 	public Optional<Message> findNextInMessageForum(BigInteger id, BigInteger forumId) {
 		return repo.findNextInMessageForum(id, forumId);
 	}
+	
+	@Override
+	public Optional<Message> findPrevInMessageForum(BigInteger id, BigInteger forumId) {
+		return repo.findPrevInMessageForum(id, forumId);
+	}
+
 
 	@Override
 	public boolean existsNextInMessageForum(BigInteger id, BigInteger forumId) {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymleaf-extras-springsecurity6">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Hello</title>
 <link th:href="@{/css/styles.css}" rel="stylesheet" />
@@ -63,8 +63,12 @@
 		<input type="hidden" name="messageId" th:value="${message.id}">
 		<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}">
 		
+		<span th:if="${hasPrev}">
+		<button id="prev" class="w3-theme" name="action" value="Prev" th:utext="${'&#9664; Prev'}"></button>
+		</span>
+		
 		<span th:if="${hasNext}">
-		<button id="next" class="w3-theme" name="action" value="Next">Next</button>
+		<button id="next" class="w3-theme" name="action" value="Next" th:utext="${'Next &#9654;'}"></button>
 		</span>
 		<span th:if="${hasNext==false}">
 		No More Messages.
