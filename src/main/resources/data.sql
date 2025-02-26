@@ -1,11 +1,11 @@
-INSERT INTO Authorities (username, authority) VALUES ('bob','ROLE_USER');
-INSERT INTO Users (username, password, enabled) VALUES ('bob', '$2a$10$MDR4W.xVzDaD//8C2tx4mO25XrJSysQGComXcUsOp/jOC2a3Rhao2', '1');
-INSERT INTO Authorities (username, authority) VALUES ('joe@king.com','ROLE_ADMIN');
-INSERT INTO Users (username, password, enabled) VALUES ('joe@king.com', '$2a$10$6a5NW/vV4M83iMMyw5wVAeG6WIDsmDTA.uOm3TQW7mEIqP771O5oO', '1');
+INSERT INTO Authorities (username, authority) VALUES ('Bob','ROLE_USER');
+INSERT INTO Users (username, password, enabled) VALUES ('Bob', '{bcrypt}$2a$10$7hssGCuqK0oYxQFMXiL8fOljpIFaKVRrK1F0E/HNb2IlIPabv18NO', '1');
+INSERT INTO Authorities (username, authority) VALUES ('Joe Cool','ROLE_ADMIN');
+INSERT INTO Users (username, password, enabled) VALUES ('Joe Cool', '{bcrypt}$2a$10$VDNg03PY4cxlHy0KDculyu3Wb1z.c3z6/qGhfRgxXJJ9rEClIqhU2', '1');
 
 
 INSERT INTO User_Details (username, first_name, last_name, email, photo, last_login) values 
-	('bob','Bob','Smith','bob.smith@email.com', FILE_READ('classpath:/static/images/bob.jpg'), current_timestamp());
+	('Bob','Bob','Smith','bob.smith@email.com', FILE_READ('classpath:/static/images/bob.jpg'), current_timestamp());
 INSERT INTO User_Details (username, first_name, last_name, email, photo, last_login) values 
 	('Joe Cool','Joe','King','joe@king.com', FILE_READ('classpath:/static/images/joe.jpg'), current_timestamp());
 	

@@ -37,8 +37,10 @@
 				th:value="${role}">
 			<p />
 		</div>
+		<!-- thumbs up <p th:utext="${'&#128077;'}"></p>-->
 	</div> <!--  END flex -->
-	<div sec:authorize="hasAuthority('ROLE_ADMIN')">
+	<div>Role(s): <span sec:authentication="principal.authorities"></span></div>
+	<div sec:authorize="isAuthenticated() && hasRole('ROLE_ADMIN')">
 		<form th:action="@{/getUsers}" method="post" action="">
 			<button class="w3-theme" name="action" value="List Users">List Users</button>
 		</form>

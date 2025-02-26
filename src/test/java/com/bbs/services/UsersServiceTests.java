@@ -26,7 +26,7 @@ public class UsersServiceTests {
 	@Test
 	public void testSave() {
 		User user = new User("fred", passwordEncoder.encode("Pass123"), true);
-		System.out.println(passwordEncoder.encode("Iansch00l"));
+		System.out.println(passwordEncoder.encode("Joe Cool"));
 		user=service.save(user);
 		assertEquals(3, user.getId());
 	}

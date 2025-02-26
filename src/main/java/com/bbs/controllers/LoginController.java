@@ -25,14 +25,14 @@ public class LoginController {
 	@Autowired
 	private DetailsServiceImpl service;
 	
-	@GetMapping("/login")
+	@GetMapping("/loginPage")
 	public String login() {
-		//bob password is puser123
-		//joe@king.com password is padm123
-		//System.out.println(passwordEncoder.encode("padm123"));
+		//Bob password is Bob
+		//Joe Cool password is Joe Cool
 		return "login";
 	}
 	
+	// Landing Page
 	@GetMapping("/hello")
 	public String hello(Model model) throws IOException {
 		String username = "Unknown";
