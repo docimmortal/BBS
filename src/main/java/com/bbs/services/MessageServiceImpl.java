@@ -41,4 +41,9 @@ public class MessageServiceImpl implements MessageService {
 		return repo.existsNextInMessageForum(id, forumId);
 	}
 
+	@Override
+	public Optional<Message> getLastMessageInMessageForum(BigInteger forumId) {
+		return repo.getLastMessageInMessageForum(forumId);
+	}
+
 }
