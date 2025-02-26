@@ -35,4 +35,14 @@ public class MessageForumServiceImpl implements MessageForumService {
 	public boolean existsNextMessageForum(BigInteger id) {
 		return repo.existsNextMessageForum(id);
 	}
+
+	@Override
+	public Optional<MessageForum> findNextMessageForum(BigInteger id) {
+		return repo.findNextMessageForum(id);
+	}
+
+	@Override
+	public Optional<MessageForum> findPrevMessageForum(BigInteger id) {
+		return repo.findPrevMessageForum(id);
+	}
 }
