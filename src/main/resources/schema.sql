@@ -42,3 +42,14 @@ CREATE TABLE Messages(
 	foreign key(user_details_id) references User_Details(id),
 	foreign key(message_forum_id) references Message_Forums(id)
 );
+
+CREATE TABLE Last_Read_Messages(
+	id bigint NOT NULL AUTO_INCREMENT,
+	PRIMARY KEY(id),
+	user_details_id bigint NOT NULL,
+	message_forum_id bigint NOT NULL,
+	message_id bigint NOT NULL,
+	foreign key(user_details_id) references User_Details(id),
+	foreign key(message_forum_id) references Message_Forums(id),
+	foreign key(message_id) references Messages(id)
+);

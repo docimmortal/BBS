@@ -23,3 +23,4 @@ INSERT INTO Messages(title, message, timestamp, user_details_id, message_forum_i
 INSERT INTO Messages(title, message, timestamp, user_details_id, message_forum_id) values 
 	('Test 3',CAST('This message is out of order.' AS CLOB),'2025-01-05 11:08:02',1,1);
 	
+INSERT INTO Last_Read_Messages(user_details_id, message_forum_id , message_id) values (1,1,1);

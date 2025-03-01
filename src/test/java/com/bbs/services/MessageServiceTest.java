@@ -91,7 +91,7 @@ public class MessageServiceTest {
 	@Test
 	@Transactional
 	public void testSaveToAutopopulatedData() {
-		Optional<UserDetails> dOptional = dService.findOptionalByUsername("bob");
+		Optional<UserDetails> dOptional = dService.findOptionalByUsername("Bob");
 		assertTrue(dOptional.isPresent());
 		UserDetails author1 = dOptional.get();
 		
@@ -105,7 +105,7 @@ public class MessageServiceTest {
 		Message message = new Message("The Title","This is a test", author1, forum1);
 		message = service.save(message);
 		assertNotNull(message.getId());
-		assertEquals(BigInteger.valueOf(4), message.getId());
+		assertEquals(BigInteger.valueOf(5), message.getId());
 		UserDetails details = message.getUserDetails();
 		assertEquals(BigInteger.valueOf(1), details.getId());
 		MessageForum mForum = message.getMessageForum();

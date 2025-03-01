@@ -26,17 +26,17 @@ public class MessageForumServiceTests {
 	@Test
 	public void testFindAll() {
 		List<MessageForum> forums = service.findAll();
-		assertEquals(2, forums.size());
+		assertEquals(4, forums.size());
 		
 		// Forum 1, has 2 messages
 		MessageForum forum1 = forums.get(0);
 		assertNotNull(forum1.getName());
 		assertEquals("General", forum1.getName());
 		assertNotNull(forum1.getDescription());
-		assertEquals("Catch-all everyday chat", forum1.getDescription());
+		assertEquals("Catch-all everyday chat.", forum1.getDescription());
 		List<Message> messageList1 = forum1.getMessages();
 		assertNotNull(messageList1);
-		assertEquals(2,messageList1.size());
+		assertEquals(3,messageList1.size());
 		Message message = messageList1.get(0);
 		assertNotNull(message);
 		assertNotNull(message.getTitle());
@@ -46,11 +46,11 @@ public class MessageForumServiceTests {
 		// Forum 2, has 1 message
 		MessageForum forum2 = forums.get(1);
 		assertNotNull(forum2.getName());
-		assertEquals("Humor", forum2.getName());
+		assertEquals("Get Creative!", forum2.getName());
 		assertNotNull(forum2.getDescription());
-		assertEquals("Funny stuff", forum2.getDescription());
+		assertEquals("Share your art!", forum2.getDescription());
 		List<Message> messageList2 = forum2.getMessages();
 		assertNotNull(messageList2);
-		assertEquals(1,messageList2.size());
+		assertEquals(0,messageList2.size());
 	}
 }

@@ -32,13 +32,13 @@ public class DetailsServiceImplTests {
 	
 	@Test
 	public void testfindByUsername() {
-		Optional<UserDetails> optional = service.findOptionalByUsername("bob");
+		Optional<UserDetails> optional = service.findOptionalByUsername("Bob");
 		assertTrue(optional.isPresent());
 	}
 	
 	@Test
 	public void testSaveNewDetails() {
-		UserDetails details = new UserDetails("amy","Amy","Jones","a.j@email.com");
+		UserDetails details = new UserDetails("Amy","Amy","Jones","a.j@email.com");
 		try {
 			BufferedImage image = ImageUtilities.getImageFromFile("none.jpg",true);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();

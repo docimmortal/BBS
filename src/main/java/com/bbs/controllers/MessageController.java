@@ -1,9 +1,6 @@
 package com.bbs.controllers;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
-import com.bbs.entites.UserDetails;
 import com.bbs.entites.Message;
-import com.bbs.entites.MessageForum;
-import com.bbs.entites.Reaction;
-import com.bbs.entites.Reply;
-import com.bbs.enums.ReactionType;
-import com.bbs.services.DetailsService;
+import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
-import com.bbs.services.ReplyService;
 import com.bbs.utilities.MenuUtilities;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,19 +29,32 @@ public class MessageController {
 	@Autowired
 	private MessageForumService mfService;
 	
+	@Autowired
+	private LastReadMessageServiceImpl lrmService;
+	
 	@PostMapping("/readMessage")
-	public String readMessage(@RequestParam(required = false, defaultValue="0") String messageId, 
-			@RequestParam(required = false, defaultValue="1") String messageForumId,
+	public String readMessage(@RequestParam(required=true) String userDetailsId,
+			@RequestParam(required = false, defaultValue="0") String messageId, 
+			@RequestParam(required = false, defaultValue="") String messageForumId,
 			@RequestParam(required = false, defaultValue="") String action,
 			@RequestParam(required = false, defaultValue="") String nextForumId,
 			@RequestParam(required = false, defaultValue="") String prevForumId,
 			Model model, HttpServletRequest request) {
 		
-		System.out.println("Message ID: "+messageId+", Message Forum ID: "+messageForumId);
-		
-		// Previous Message Button
-		BigInteger currentMessageId=new BigInteger(messageId);
-		BigInteger forumId = new BigInteger(messageForumId);
+		BigInteger currentMessageId=null;
+		BigInteger forumId=null;
+		// First time hitting the readMessage logic
+		if (messageForumId.isBlank()) {
+			System.out.println("Looking for next unread message for userId:"+userDetailsId);
+			BigInteger detailsId = new BigInteger(userDetailsId);
+			BigInteger[] results = lrmService.getNextForumWithUnreadMessages(detailsId, BigInteger.ZERO);
+			forumId=results[0];
+			currentMessageId=results[1];
+		} else {
+			currentMessageId=new BigInteger(messageId);
+			forumId = new BigInteger(messageForumId);
+		}
+		System.out.println("Message ID: "+currentMessageId+", Message Forum ID: "+forumId);
 		
 		// Logic for going to prev/next forum
 		if (action.equalsIgnoreCase("NextForum")) {
@@ -119,8 +123,9 @@ public class MessageController {
 		}
 		Message message  = null;
 		if (moptional.isPresent()) {
-			System.out.println("getMessage: Found a real message!");
 			message = moptional.get();
+			System.out.println("getMessage: Found a real message! id:"+message.getId());
+
 		}
 		return message;
 	}
@@ -156,8 +161,9 @@ public class MessageController {
 		return nextForumId;
 	}
 	
-	/*@PostMapping("/navigate")
-	public ModelAndView navigate(@RequestParam String action, @RequestParam String messageId,
+	@PostMapping("/navigate")
+	public ModelAndView navigate(@RequestParam String userDetailsId,
+			@RequestParam String action, @RequestParam String messageId,
 			@RequestParam String messageForumId, HttpServletRequest request) {
 		System.out.println("Read next message...");
 		request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
@@ -171,7 +177,8 @@ public class MessageController {
 			iid--;
 		}
 		request.setAttribute("id", iid);
+		request.setAttribute("userDetailsId", userDetailsId);
 		return mav;
-	}*/
+	}
 		
 }

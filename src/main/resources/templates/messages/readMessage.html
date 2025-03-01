@@ -7,9 +7,7 @@
 <link th:href="@{/css/styles.css}" rel="stylesheet" />
 <link th:href="@{/css/new-stuff.css}" rel="stylesheet" />
 <link th:href="@{/css/themes/green.css}" rel="stylesheet" />
-<link th:href="@{/css/themes/fontawesome.min.css}" rel="stylesheet" />
-<link th:href="@{/css/themes/brands.min.css}" rel="stylesheet" />
-<link th:href="@{/css/themes/solid.min.css}" rel="stylesheet" />
+
 </head>
 <body class="container">
 	<div th:insert="fragments/navbar" id="navbar"></div>
@@ -62,6 +60,11 @@
 	<form th:action="@{/navigate}" method="post" action="">
 		<input type="hidden" name="messageId" th:value="${message.id}">
 		<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}">
+		<input type="hidden" name="userDetailsId" th:value="${userDetailsId}">
+		<span th:if="${prevForumId}">
+		<button id="prevForum" class="w3-theme" name="action" value="PrevForum" th:utext="${'&Lleftarrow; Prev Next Forum'}"></button>
+		<input type="hidden" name="prevForumId" th:value="${prevForumId}">
+		</span>
 		
 		<span th:if="${hasPrev}">
 		<button id="prev" class="w3-theme" name="action" value="Prev" th:utext="${'&#9664; Prev'}"></button>
@@ -70,12 +73,12 @@
 		<span th:if="${hasNext}">
 		<button id="next" class="w3-theme" name="action" value="Next" th:utext="${'Next &#9654;'}"></button>
 		</span>
-		<span th:if="${hasNext==false}">
-		No More Messages.
+		
+		<span th:if="${nextForumId}">
+		<button id="nextForum" class="w3-theme" name="action" value="NextForum" th:utext="${'Next Forum &Rrightarrow;'}"></button>
+		<input type="hidden" name="nextForumId" th:value="${nextForumId}">
 		</span>
-		<span th:if="${nextForumHasMessage}">
-			<span th:text="'Forum '+${nextForumId}+' has messages.'"></span>
-		</span>
+		
 	</form>
 	
 	<script>

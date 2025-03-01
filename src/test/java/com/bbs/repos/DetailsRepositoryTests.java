@@ -16,7 +16,6 @@ import com.bbs.entites.UserDetails;
 
 import jakarta.transaction.Transactional;
 
-@ExtendWith(SpringExtension.class)
 @Transactional
 @SpringBootTest
 public class DetailsRepositoryTests {
@@ -32,7 +31,7 @@ public class DetailsRepositoryTests {
 	
 	@Test
 	public void testFindByUsername() {
-		Optional<UserDetails> optional = repo.findOptionalByUsername("bob");
+		Optional<UserDetails> optional = repo.findOptionalByUsername("Bob");
 		assertTrue(optional.isPresent());
 	}
 }
