@@ -17,6 +17,7 @@ public class LastReadMessageServiceImpl implements LastReadMessageService {
 	@Override
 	public BigInteger[] getNextForumWithUnreadMessages(BigInteger userDetailsId, BigInteger forumId) {
 		List<BigInteger[]> results = repo.getNextForumWithUnreadMessages(userDetailsId, forumId);
+		if (results.size()==0) return null;
 		return results.get(0);
 	}
 

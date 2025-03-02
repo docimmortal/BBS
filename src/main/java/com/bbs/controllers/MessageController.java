@@ -38,18 +38,31 @@ public class MessageController {
 			@RequestParam(required = false, defaultValue="") String messageForumId,
 			@RequestParam(required = false, defaultValue="") String action,
 			@RequestParam(required = false, defaultValue="") String nextForumId,
+			@RequestParam(required = false, defaultValue="") String nextMessageId,
 			@RequestParam(required = false, defaultValue="") String prevForumId,
+			@RequestParam(required = false, defaultValue="") String prevMessageId,
 			Model model, HttpServletRequest request) {
 		
+		// Cleansing data
+		messageId=messageId.replaceAll("[^0-9]", "");
+		messageForumId=messageForumId.replaceAll("[^0-9]", "");
+		
+		System.out.println("Got userDetailsId: "+userDetailsId+", messageId: "+messageId+
+				", messageForumId: "+messageForumId);
+		
+		model.addAttribute("userDetailsId",userDetailsId);
 		BigInteger currentMessageId=null;
 		BigInteger forumId=null;
-		// First time hitting the readMessage logic
+		Message message=null;
+		// First time hitting the readMessage logic, look for an unread message
 		if (messageForumId.isBlank()) {
 			System.out.println("Looking for next unread message for userId:"+userDetailsId);
 			BigInteger detailsId = new BigInteger(userDetailsId);
 			BigInteger[] results = lrmService.getNextForumWithUnreadMessages(detailsId, BigInteger.ZERO);
-			forumId=results[0];
-			currentMessageId=results[1];
+			if (results != null && results.length==2 && !results[0].equals(BigInteger.ZERO)) {
+				forumId=results[0];
+				currentMessageId=results[1];
+			}
 		} else {
 			currentMessageId=new BigInteger(messageId);
 			forumId = new BigInteger(messageForumId);
@@ -59,11 +72,11 @@ public class MessageController {
 		// Logic for going to prev/next forum
 		if (action.equalsIgnoreCase("NextForum")) {
 			forumId=new BigInteger(nextForumId);
-			// for next logic, it looks for a number greater than currentMsgId
-			currentMessageId=new BigInteger("0");
+			currentMessageId=new BigInteger(nextMessageId);
 			action="next";
 			System.out.println("Went to [NextForum] to ["+action+"].");
 		} else if (action.equalsIgnoreCase("PrevForum") && !forumId.equals(BigInteger.ONE)) {
+			// This will change to SQL to search backwards
 			forumId=new BigInteger(prevForumId);
 			Optional<Message> msg=mService.getLastMessageInMessageForum(forumId);
 			if (msg.isPresent()) {
@@ -75,20 +88,24 @@ public class MessageController {
 			System.out.println("Went to [PrevForum] to ["+action+"].");
 		}
 		
-		// Gets next or previous message
-		Message message = getMesage(action, forumId, currentMessageId);
-		if (message == null) {
-			System.out.println("ERROR: Message is null!");
-		} else {
-			setNavigation(message.getId(), message.getMessageForum().getId(), model);
+		// Gets next or previous message 
+		if (forumId != null) {
+			message = getMesage(action, forumId, currentMessageId);
+			if (message == null) {
+				System.out.println("ERROR: Message is null!");
+			} else {
+				BigInteger detailsId = new BigInteger(userDetailsId);
+				setNavigation(detailsId,message.getId(), message.getMessageForum().getId(), model);			
+			}
+			model.addAttribute("message",message);
 		}
 
-		model.addAttribute("message",message);
 		model.addAttribute("menus",MenuUtilities.getMenus());
 		return "messages/readMessage";
 	}
 	
-	private void setNavigation(BigInteger currentMessageId, BigInteger currentForumId, Model model) {
+	private void setNavigation(BigInteger detailsId, BigInteger currentMessageId, 
+			BigInteger currentForumId, Model model) {
 		
 		Optional<Message> mOptional = mService.findPrevInMessageForum(currentMessageId, currentForumId);
 		if (mOptional.isPresent()) {
@@ -99,14 +116,24 @@ public class MessageController {
 			}
 		}
 		
+		// Is there another message in the current forum?
 		mOptional = mService.findNextInMessageForum(currentMessageId,currentForumId);
 		if (mOptional.isPresent()) {
 			model.addAttribute("hasNext", mOptional.get().getId());
 		} else {
-			// is there a next forum with messages
-			BigInteger nextForumIdWithMsgs = findNextForum(currentForumId, model);
-			if (!nextForumIdWithMsgs.equals(BigInteger.ZERO)) {
-				model.addAttribute("nextForumId", nextForumIdWithMsgs);
+			// Is there a next forum with unread messages?
+			BigInteger[] results = lrmService.getNextForumWithUnreadMessages(detailsId, currentForumId);
+			if (results != null && results.length==2 && !results[0].equals(BigInteger.ZERO)) {
+				BigInteger nextForumIdWithMsgs=results[0];
+				BigInteger lastReadId=results[1];
+				System.out.println("Got forum: "+nextForumIdWithMsgs+", lastReadId: "+lastReadId);
+				//BigInteger nextForumIdWithMsgs = findNextForum(currentForumId, model);
+				//if (!nextForumIdWithMsgs.equals(BigInteger.ZERO)) {
+					model.addAttribute("nextForumId", nextForumIdWithMsgs);
+					model.addAttribute("nextMessageId", lastReadId);
+				//}
+			} else {
+				System.out.println("No more messages");
 			}
 		}
 	}
@@ -129,7 +156,7 @@ public class MessageController {
 		}
 		return message;
 	}
-	
+	/*
 	private BigInteger findNextForum(BigInteger currentForumId, Model model) {
 		System.out.println("Previous forum: "+currentForumId);
 		// check to see if a next forum exist
@@ -159,10 +186,10 @@ public class MessageController {
 			nextForumId = BigInteger.ZERO;
 		}
 		return nextForumId;
-	}
-	
+	}*/
+	/*
 	@PostMapping("/navigate")
-	public ModelAndView navigate(@RequestParam String userDetailsId,
+	public ModelAndView navigate(@RequestParam(required=true) String userDetailsId,
 			@RequestParam String action, @RequestParam String messageId,
 			@RequestParam String messageForumId, HttpServletRequest request) {
 		System.out.println("Read next message...");
@@ -176,9 +203,9 @@ public class MessageController {
 		} else if (action.equalsIgnoreCase("Previous") && iid>1) {
 			iid--;
 		}
-		request.setAttribute("id", iid);
+		request.setAttribute("messageId", iid);
 		request.setAttribute("userDetailsId", userDetailsId);
 		return mav;
-	}
+	}*/
 		
 }

@@ -14,6 +14,8 @@ spring:
       settings.web-allow-others: false
   messages:
     encoding: UTF-8
+  thymeleaf:
+    prefix: classpath:/templates/fragments/
 server:
   servlet:
     encoding:

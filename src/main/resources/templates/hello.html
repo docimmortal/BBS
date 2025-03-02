@@ -11,7 +11,9 @@
 <link th:href="@{/css/themes/green.css}" rel="stylesheet" />
 </head>
 <body class="container">
-	<div th:insert="fragments/navbar" id="navbar"></div>
+	<div id="navbar" th:insert="~{fragments/nav :: navbar(0,1)}"></div>
+	
+	<th:block th:fragment="navbar(0,1)" th:remove="tag"></th:block>
 
 	<h1 class="w3-container w3-clear w3-theme w3-card">Profile</h1>
 
@@ -45,5 +47,7 @@
 			<button class="w3-theme" name="action" value="List Users">List Users</button>
 		</form>
 	</div>
+	
+	<div id="footer" th:insert="~{fragments/footer :: footer}"></div>
 </body>
 </html>
