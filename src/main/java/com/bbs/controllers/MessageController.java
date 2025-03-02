@@ -74,7 +74,6 @@ public class MessageController {
 			forumId=new BigInteger(nextForumId);
 			currentMessageId=new BigInteger(nextMessageId);
 			action="next";
-			System.out.println("Went to [NextForum] to ["+action+"].");
 		} else if (action.equalsIgnoreCase("PrevForum") && !forumId.equals(BigInteger.ONE)) {
 			// This will change to SQL to search backwards
 			forumId=new BigInteger(prevForumId);
@@ -85,7 +84,6 @@ public class MessageController {
 				currentMessageId = msg.get().getId().add(BigInteger.ONE);
 			}
 			action="prev";
-			System.out.println("Went to [PrevForum] to ["+action+"].");
 		}
 		
 		// Gets next or previous message 
@@ -111,8 +109,17 @@ public class MessageController {
 		if (mOptional.isPresent()) {
 			model.addAttribute("hasPrev", mOptional.get().getId());
 		} else {
-			if (!currentForumId.equals(BigInteger.ONE)) {
-				// is there a previous forum with messages
+			if (currentForumId.compareTo(BigInteger.ONE)==1) {
+				Optional<Message> mLast = null;
+				BigInteger priorForumId = currentForumId;
+				do {
+					priorForumId = priorForumId.subtract(BigInteger.ONE);
+					mLast = mService.getLastMessageInMessageForum(priorForumId);
+				} while (mLast.isEmpty() && priorForumId.compareTo(BigInteger.ONE)==1);
+				if (mLast.isPresent()) {
+					model.addAttribute("prevMessageId",mLast.get().getId());
+					model.addAttribute("prevForumId", priorForumId);
+				}
 			}
 		}
 		
@@ -126,12 +133,8 @@ public class MessageController {
 			if (results != null && results.length==2 && !results[0].equals(BigInteger.ZERO)) {
 				BigInteger nextForumIdWithMsgs=results[0];
 				BigInteger lastReadId=results[1];
-				System.out.println("Got forum: "+nextForumIdWithMsgs+", lastReadId: "+lastReadId);
-				//BigInteger nextForumIdWithMsgs = findNextForum(currentForumId, model);
-				//if (!nextForumIdWithMsgs.equals(BigInteger.ZERO)) {
-					model.addAttribute("nextForumId", nextForumIdWithMsgs);
-					model.addAttribute("nextMessageId", lastReadId);
-				//}
+				model.addAttribute("nextForumId", nextForumIdWithMsgs);
+				model.addAttribute("nextMessageId", lastReadId);
 			} else {
 				System.out.println("No more messages");
 			}
@@ -142,70 +145,18 @@ public class MessageController {
 		System.out.println("getMessage: Action is ["+action+"]");
 		Optional<Message> moptional=null;
 		if (action.equalsIgnoreCase("next") || action.equals("")) {
-			System.out.println("getMessage: Getting next message from forum "+forumId+". Current message is "+currentId+".");
+			//System.out.println("getMessage: Getting next message from forum "+forumId+". Current message is "+currentId+".");
 			moptional = mService.findNextInMessageForum(currentId,forumId);
 		} else if (action.equalsIgnoreCase("prev")) {
-			System.out.println("getMessage: Getting prev message from forum "+forumId+". Current message is "+currentId+".");
+			//System.out.println("getMessage: Getting prev message from forum "+forumId+". Current message is "+currentId+".");
 			moptional = mService.findPrevInMessageForum(currentId, forumId);
 		}
 		Message message  = null;
 		if (moptional.isPresent()) {
 			message = moptional.get();
-			System.out.println("getMessage: Found a real message! id:"+message.getId());
+			//System.out.println("getMessage: Found a real message! id:"+message.getId());
 
 		}
 		return message;
-	}
-	/*
-	private BigInteger findNextForum(BigInteger currentForumId, Model model) {
-		System.out.println("Previous forum: "+currentForumId);
-		// check to see if a next forum exist
-		boolean nextForumExists = mfService.existsNextMessageForum(currentForumId);
-		boolean nextForumHasMessage = false;
-		BigInteger nextForumId = new BigInteger(currentForumId.toString());
-		while (nextForumExists && !nextForumHasMessage) {
-			
-			nextForumId=nextForumId.add(BigInteger.ONE); // get next forum number
-			// hard code message of next forum to 0 to find next message in that forum
-			nextForumHasMessage = mService.existsNextInMessageForum(BigInteger.ZERO, nextForumId);
-			if (nextForumHasMessage) {
-				System.out.println("Forum "+nextForumId+" has messages!");
-			} else {
-				System.out.println("Forum "+nextForumId+" has no new messages!");
-			}
-			if (!nextForumHasMessage) {
-				// That forum does not have next messages. Try next one, if one exists.
-				nextForumExists = mfService.existsNextMessageForum(nextForumId);
-			}
-			System.out.println("Current forum is now: "+currentForumId+" ("+nextForumHasMessage+")");
-		}
-		if (nextForumHasMessage) {
-			model.addAttribute("nextForumId",nextForumId);
-		}
-		if (!nextForumExists) {
-			nextForumId = BigInteger.ZERO;
-		}
-		return nextForumId;
-	}*/
-	/*
-	@PostMapping("/navigate")
-	public ModelAndView navigate(@RequestParam(required=true) String userDetailsId,
-			@RequestParam String action, @RequestParam String messageId,
-			@RequestParam String messageForumId, HttpServletRequest request) {
-		System.out.println("Read next message...");
-		request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-		ModelAndView mav = new ModelAndView("forward:/readMessage");
-		Integer iid = Integer.parseInt(messageId);
-		//Integer fid = Integer.parseInt(messageForumId);
-		// pretend to find next iid.
-		if (action.equalsIgnoreCase("Next")) {
-			iid++;
-		} else if (action.equalsIgnoreCase("Previous") && iid>1) {
-			iid--;
-		}
-		request.setAttribute("messageId", iid);
-		request.setAttribute("userDetailsId", userDetailsId);
-		return mav;
-	}*/
-		
+	}	
 }
