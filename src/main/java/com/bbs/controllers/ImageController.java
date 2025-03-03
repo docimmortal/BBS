@@ -27,7 +27,7 @@ public class ImageController {
 	                               HttpServletResponse response) throws IOException {
 		response.setContentType("image/jpeg"); // Or whatever format you wanna use
 		System.out.println("USERNAME: "+username);
-		Optional<UserDetails> optional = service.findOptionalByUsername(username);
+		Optional<UserDetails> optional = service.findByUsername(username);
 		UserDetails details = optional.get();
 		InputStream is = new ByteArrayInputStream(details.getPhoto());
 		IOUtils.copy(is, response.getOutputStream());

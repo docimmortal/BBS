@@ -1,6 +1,7 @@
 package com.bbs.controllers;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
 import com.bbs.entites.Message;
+import com.bbs.entites.MessageForum;
+import com.bbs.entites.UserDetails;
+import com.bbs.services.DetailsService;
 import com.bbs.services.LastReadMessageServiceImpl;
 import com.bbs.services.MessageForumService;
 import com.bbs.services.MessageService;
 import com.bbs.utilities.MenuUtilities;
+import com.bbs.utilities.MessageUtilities;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,6 +33,9 @@ public class MessageController {
 	
 	@Autowired
 	private MessageForumService mfService;
+	
+	@Autowired
+	private DetailsService udService;
 	
 	@Autowired
 	private LastReadMessageServiceImpl lrmService;
@@ -43,9 +51,14 @@ public class MessageController {
 			@RequestParam(required = false, defaultValue="") String prevMessageId,
 			Model model, HttpServletRequest request) {
 		
-		// Cleansing data
+		// Cleansing data, removing non-numerics from String
 		messageId=messageId.replaceAll("[^0-9]", "");
 		messageForumId=messageForumId.replaceAll("[^0-9]", "");
+		userDetailsId=userDetailsId.replaceAll("[^0-9]", "");
+		nextForumId=nextForumId.replaceAll("[^0-9]", "");
+		nextMessageId=nextMessageId.replaceAll("[^0-9]", "");
+		prevForumId=prevForumId.replaceAll("[^0-9]", "");
+		prevMessageId=prevMessageId.replaceAll("[^0-9]", "");
 		
 		System.out.println("Got userDetailsId: "+userDetailsId+", messageId: "+messageId+
 				", messageForumId: "+messageForumId);
@@ -54,6 +67,7 @@ public class MessageController {
 		BigInteger currentMessageId=null;
 		BigInteger forumId=null;
 		Message message=null;
+		
 		// First time hitting the readMessage logic, look for an unread message
 		if (messageForumId.isBlank()) {
 			System.out.println("Looking for next unread message for userId:"+userDetailsId);
@@ -100,6 +114,71 @@ public class MessageController {
 
 		model.addAttribute("menus",MenuUtilities.getMenus());
 		return "messages/readMessage";
+	}
+	
+	@PostMapping("/saveMessage")
+	public String saveMessage(@RequestParam(required=true) String userDetailsId,
+			@RequestParam(required = true) String messageForumId,
+			@RequestParam(required = true) String newTitle,
+			@RequestParam(required = true) String newMessageText,
+			@RequestParam(required = true) String lastReadMessageId,
+			Model model, HttpServletRequest request) {
+		System.out.println("userDetailsId: "+userDetailsId);
+		System.out.println("messageForumId: "+messageForumId);
+		System.out.println("lastReadMessageId: "+lastReadMessageId);
+		System.out.println("newTitle: "+newTitle);
+		System.out.println("newMessageText: "+newMessageText);
+		
+		// Cleansing data
+		messageForumId=messageForumId.replaceAll("[^0-9]", "");
+		userDetailsId=userDetailsId.replaceAll("[^0-9]", "");
+		lastReadMessageId=lastReadMessageId.replaceAll("[^0-9]", "");
+		newTitle = MessageUtilities.cleanMessage(newTitle);
+		newMessageText = MessageUtilities.cleanMessage(newMessageText);
+		
+		String url="error";
+		
+		if (!messageForumId.isBlank() && !userDetailsId.isBlank() && !newMessageText.isBlank() &&!newTitle.isBlank()) {			
+			Optional<MessageForum> forum = mfService.findById(new BigInteger(messageForumId));
+			Optional<UserDetails> user = udService.findById(new BigInteger(userDetailsId));
+		
+			if (forum.isPresent() && user.isPresent()) {
+					Message message = new Message();
+					message.setMessage(newMessageText);
+					message.setTimestamp(LocalDateTime.now());
+					message.setTitle(newTitle);
+					message.setMessageForum(forum.get());
+					message.setUserDetails(user.get());
+					message=mService.save(message);
+
+					model.addAttribute("userDetailsId",userDetailsId);
+					System.out.println("lastReadMessageId: "+lastReadMessageId);
+
+					Optional<Message> origMsg = mService.findById(new BigInteger(lastReadMessageId));
+					model.addAttribute("message",origMsg.get());
+					setNavigation(userDetailsId,lastReadMessageId, messageForumId, model);	
+					model.addAttribute("menus",MenuUtilities.getMenus());
+					url="messages/readMessage";
+			} else {
+				if (forum.isEmpty()) System.out.println("Forum for "+messageForumId+" not found.");
+				if (user.isEmpty()) System.out.println("UserDetails for "+userDetailsId+" not found.");
+			}
+		} else {
+			if (messageForumId.isBlank()) System.out.println("MessageForumId is blank or invalid.");
+			if (userDetailsId.isBlank()) System.out.println("UserDetailsId is blank or invalid.");
+			if (newMessageText.isBlank()) System.out.println("No message text found.");
+			if (newTitle.isBlank()) System.out.println("No title found.");
+		}
+
+		return url;
+	}
+	
+	private void setNavigation(String detailsId, String currentMessageId, 
+			String currentForumId, Model model) {
+		BigInteger dId = new BigInteger(detailsId);
+		BigInteger mId = new BigInteger(currentMessageId);
+		BigInteger fId = new BigInteger(currentForumId);
+		setNavigation(dId, mId, fId, model);
 	}
 	
 	private void setNavigation(BigInteger detailsId, BigInteger currentMessageId, 

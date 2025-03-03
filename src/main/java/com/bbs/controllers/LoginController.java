@@ -48,7 +48,7 @@ public class LoginController {
 			role=role.substring(0, role.length()-1);
 			System.out.println(role);
 			model.addAttribute("role",role);
-			Optional<UserDetails> optional = service.findOptionalByUsername(username);
+			Optional<UserDetails> optional = service.findByUsername(username);
 			details = optional.get();
 
 			System.out.println("Hello user ID: "+details.getId());

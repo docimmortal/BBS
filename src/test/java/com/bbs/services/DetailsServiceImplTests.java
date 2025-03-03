@@ -32,7 +32,7 @@ public class DetailsServiceImplTests {
 	
 	@Test
 	public void testfindByUsername() {
-		Optional<UserDetails> optional = service.findOptionalByUsername("Bob");
+		Optional<UserDetails> optional = service.findByUsername("Bob");
 		assertTrue(optional.isPresent());
 	}
 	

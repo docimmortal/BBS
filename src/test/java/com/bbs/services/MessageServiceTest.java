@@ -91,7 +91,7 @@ public class MessageServiceTest {
 	@Test
 	@Transactional
 	public void testSaveToAutopopulatedData() {
-		Optional<UserDetails> dOptional = dService.findOptionalByUsername("Bob");
+		Optional<UserDetails> dOptional = dService.findByUsername("Bob");
 		assertTrue(dOptional.isPresent());
 		UserDetails author1 = dOptional.get();
 		

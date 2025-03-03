@@ -21,7 +21,22 @@
 
 	<!--  START if we have a message  -->
 	<h1 th:if="${message != null}" class="w3-container w3-clear w3-theme w3-card" th:text="${message.messageForum.name}"></h1>
-		<div th:if="${message != null}">
+		<button id="postMsgButton" class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Post Message</button>
+
+		<div class="hide" id="postMsg">
+		<form th:action="@{/saveMessage}" method="post" action="">
+			<input type="hidden" name="userDetailsId" th:value="${userDetailsId}" readonly>
+			<input type="hidden" name="messageForumId" th:value="${message.messageForum.id}" readonly>
+			<input type="hidden" name="lastReadMessageId" th:value="${message.id}" readonly >
+			<label class="w3-theme" for="newTitle">Title</label><input id="newTitle" type="text" name="newTitle">
+			<textarea id="postmsgId"  class="replyMessage"  name="newMessageText"></textarea><br>
+			<button class="w3-theme-dark" onclick="toggle(event,'postMsg','postMsgButton','currentMessageId')">Cancel</button>
+			<input class="w3-theme" type="submit" value="Save">
+		</form>
+		</div>
+
+
+		<div id="currentMessageId" th:if="${message != null}">
 			<label class="w3-theme" for="author">Author</label><input type="text" name="author" id="author" th:value="${message.userDetails.username}" readonly><br>
 		
 			<label class="w3-theme" for="title">Title</label><input type="text" name="title" id="title" th:value="${message.title}" readonly><br>
@@ -60,7 +75,7 @@
 			<h2>Reply</h2>
 			<form th:action="@{/saveReply}" method="post" action="">
 				<textarea id="mainReplyId"  class="replyMessage"  name="messageText"></textarea><br>
-				<button class="w3-theme-dark" onclick="toggleReply(event,'replyToMain','mainReplyButton')">Cancel</button>
+				<button class="w3-theme-dark" onclick="toggle(event,'replyToMain','mainReplyButton')">Cancel</button>
 				<input class="w3-theme" type="submit" value="Save">
 			</form>
 		</div>
@@ -118,16 +133,26 @@
 			}
 		}
 		
-		function toggleReply(event,divId, buttonId) {
+		function toggle(event,divId, buttonId, anotherId="") {
   			var div = document.getElementById(divId);
+  			let div2="";
+  			if (anotherId != "") {
+  				div2=document.getElementById(anotherId);
+  			}
   			var btn = document.getElementById(buttonId);
   			var next = document.getElementById('next');
   			if (div.classList.contains('hide')) {
   				div.classList.remove('hide');
+  				if (div2!="") {
+  					div2.classList.add('hide');
+  				}
   				btn.classList.add('hide');
   				next.classList.add('hide');
   			} else {
   				div.classList.add('hide');
+  				if (div2 != "") {
+  					div2.classList.remove('hide');
+  				}
   				btn.classList.remove('hide');
   				next.classList.remove('hide');
   			}

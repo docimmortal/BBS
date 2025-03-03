@@ -75,10 +75,10 @@ input, button {
 .author {
   width: 20%;
 }
-#title {
+#title, #newTitle {
   width: 40%;
 }
-#title, .author {
+#title, #newTitle, .author {
   margin-bottom: 5px;
 }
 

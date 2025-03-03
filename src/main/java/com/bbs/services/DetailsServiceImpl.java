@@ -3,6 +3,7 @@ package com.bbs.services;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,13 @@ public class DetailsServiceImpl implements DetailsService {
 	
 
 	@Override
-	public Optional<UserDetails> findOptionalByUsername(String username) {
+	public Optional<UserDetails> findByUsername(String username) {
 		return repo.findOptionalByUsername(username);
+	}
+	
+	@Override
+	public Optional<UserDetails> findById(BigInteger id) {
+		return repo.findById(id);
 	}
 
 	@Override
